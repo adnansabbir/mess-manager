@@ -29,6 +29,14 @@ const SignInStyleClasses = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    otherSignInButton: {
+        margin: theme.spacing(0, 0, 2),
+    },
+    socialMediaLogo:{
+        height: '24px',
+        width: '24px',
+        margin: '5px 20px'
+    }
 }));
 
 export default SignInStyleClasses;

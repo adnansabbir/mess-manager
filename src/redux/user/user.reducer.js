@@ -1,7 +1,8 @@
 import USER_ACTION_TYPES from "./user.types";
 
 const INITIAL_STATE = {
-    currentUser: null
+    currentUser: null,
+    authStateFetched: false,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -10,6 +11,12 @@ const userReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 currentUser: action.payload
+            };
+
+        case USER_ACTION_TYPES.SET_AUTH_STATE_FETCHED:
+            return {
+                ...state,
+                authStateFetched: true
             };
 
         default:

@@ -8,6 +8,7 @@ import {APP_ROUTES} from './route_guards/App.routes';
 import SignInSide from "./components/SignIn/SignIn.component";
 import {selectCurrentUser} from "./redux/user/user.selector";
 import {setCurrentUser} from "./redux/user/user.actions";
+import AuthPage from "./pages/auth/auth.page";
 
 const publicPage = () => (<h1>Public</h1>);
 const privatePage = () => (<h1>private</h1>);
@@ -20,7 +21,6 @@ class App extends React.Component {
         const {setCurrentUser} = this.props;
         this.firebaseAuthUnsubscription = auth.onAuthStateChanged(async userAuth => {
             if (userAuth) {
-                console.log(userAuth);
                 const userRef = await createOrGetUser(userAuth);
                 userRef.onSnapshot(snapshot => {
                     setCurrentUser({
@@ -36,12 +36,16 @@ class App extends React.Component {
         })
     }
 
+    componentWillUnmount() {
+        this.firebaseAuthUnsubscription();
+    }
+
     render() {
         return (
             <div className="App">
                 <Switch>
                     <Route exact path={APP_ROUTES.LANDING_PAGE} component={publicPage}/>
-                    <AuthPageRoute exact path={APP_ROUTES.AUTH} component={SignInSide}/>
+                    <AuthPageRoute path={APP_ROUTES.AUTH} component={AuthPage}/>
                     <PrivateRoute exact path={APP_ROUTES.AUTHENTICATED_PAGE} component={privatePage}/>
                     <Route path='*' exact={true} component={pageNotFound}/>
                 </Switch>

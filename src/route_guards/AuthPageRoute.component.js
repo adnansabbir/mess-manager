@@ -5,7 +5,7 @@ import {APP_ROUTES} from './App.routes';
 const isAuthenticated = false;
 const AuthPageRoute = ({component: Component, ...rest}) => (
     <Route {...rest} render={(props) => (
-        isAuthenticated ? <Redirect to={APP_ROUTES.LANDING_PAGE}/> : <Component/>
+        isAuthenticated ? <Redirect to={APP_ROUTES.LANDING_PAGE}/> : <Component {...props}/>
     )}/>
 );
 

@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import SignInStyleClasses from './SignIn.style';
 import {ReactComponent as GoogleLogo} from "../../assets/icons/google.svg";
 import {ReactComponent as FacebookLogo} from "../../assets/icons/facebook.svg";
+import {signInWithGoogle} from "../../firebase/firebase.utils";
 
 
 function Copyright() {
@@ -86,6 +87,7 @@ export default function SignInSide() {
                             fullWidth
                             variant="outlined"
                             color="default"
+                            onClick={signInWithGoogle}
                             className={classes.otherSignInButton}>
                             <GoogleLogo className = {classes.socialMediaLogo}/>
                             <span>Sign In With Google</span>

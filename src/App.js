@@ -1,16 +1,15 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom';
+import {Switch, Route, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {auth, createOrGetUser} from "./firebase/firebase.utils";
 import './App.css';
 import {PrivateRoute, AuthPageRoute} from './route_guards/AppRouteGuards.route';
 import {APP_ROUTES} from './route_guards/App.routes';
-import SignInSide from "./components/SignIn/SignIn.component";
-import {selectCurrentUser} from "./redux/user/user.selector";
-import {setCurrentUser} from "./redux/user/user.actions";
+import {selectAuthStateFetched, selectCurrentUser} from "./redux/user/user.selector";
+import {setAuthStateFetched, setCurrentUser} from "./redux/user/user.actions";
 import AuthPage from "./pages/auth/auth.page";
 
-const publicPage = () => (<h1>Public</h1>);
+const publicPage = () => (<Link to='/'>Public</Link>);
 const privatePage = () => (<h1>private</h1>);
 const pageNotFound = () => (<h1>404 Page not Found</h1>);
 
@@ -18,7 +17,7 @@ class App extends React.Component {
     firebaseAuthUnsubscription;
 
     componentDidMount() {
-        const {setCurrentUser} = this.props;
+        const {setCurrentUser, setAuthStateFetched} = this.props;
         this.firebaseAuthUnsubscription = auth.onAuthStateChanged(async userAuth => {
             if (userAuth) {
                 const userRef = await createOrGetUser(userAuth);
@@ -28,10 +27,12 @@ class App extends React.Component {
                             id: snapshot.id,
                             ...snapshot.data()
                         }
-                    })
+                    });
+                    setAuthStateFetched()
                 })
             } else {
-                setCurrentUser(userAuth)
+                setCurrentUser(userAuth);
+                setAuthStateFetched()
             }
         })
     }
@@ -41,7 +42,9 @@ class App extends React.Component {
     }
 
     render() {
+        const {authStateFetched} = this.props;
         return (
+            authStateFetched ?
             <div className="App">
                 <Switch>
                     <Route exact path={APP_ROUTES.LANDING_PAGE} component={publicPage}/>
@@ -49,16 +52,18 @@ class App extends React.Component {
                     <PrivateRoute exact path={APP_ROUTES.AUTHENTICATED_PAGE} component={privatePage}/>
                     <Route path='*' exact={true} component={pageNotFound}/>
                 </Switch>
-            </div>
+            </div> : <div/>
         );
     }
 }
 
 const mapStateToProps = state => ({
-    currentUser: selectCurrentUser(state)
+    currentUser: selectCurrentUser(state),
+    authStateFetched: selectAuthStateFetched(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-    setCurrentUser: user => dispatch(setCurrentUser(user))
+    setCurrentUser: user => dispatch(setCurrentUser(user)),
+    setAuthStateFetched: () => dispatch(setAuthStateFetched())
 });
 export default connect(mapStateToProps, mapDispatchToProps)(App);

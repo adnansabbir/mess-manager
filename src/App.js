@@ -1,17 +1,18 @@
 import React from 'react';
-import {Switch, Route, Link} from 'react-router-dom';
+import {Switch, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {auth, createOrGetUser} from "./firebase/firebase.utils";
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {PrivateRoute, AuthPageRoute} from './route_guards/AppRouteGuards.route';
 import {APP_ROUTES} from './route_guards/App.routes';
 import {selectAuthStateFetched, selectCurrentUser} from "./redux/user/user.selector";
 import {setAuthStateFetched, setCurrentUser} from "./redux/user/user.actions";
 import AuthPage from "./pages/auth/auth.page";
+import LandingPage from "./pages/landing_page/landing_page.page";
+import PageNotFound from "./pages/page_not_found/page_not_found.page";
 
-const publicPage = () => (<Link to='/'>Public</Link>);
 const privatePage = () => (<h1>private</h1>);
-const pageNotFound = () => (<h1>404 Page not Found</h1>);
 
 class App extends React.Component {
     firebaseAuthUnsubscription;
@@ -45,14 +46,21 @@ class App extends React.Component {
         const {authStateFetched} = this.props;
         return (
             authStateFetched ?
-            <div className="App">
-                <Switch>
-                    <Route exact path={APP_ROUTES.LANDING_PAGE} component={publicPage}/>
-                    <AuthPageRoute path={APP_ROUTES.AUTH} component={AuthPage}/>
-                    <PrivateRoute exact path={APP_ROUTES.AUTHENTICATED_PAGE} component={privatePage}/>
-                    <Route path='*' exact={true} component={pageNotFound}/>
-                </Switch>
-            </div> : <div/>
+                <div className="App">
+                    <Switch>
+                        <Route exact path={APP_ROUTES.LANDING_PAGE} component={LandingPage}/>
+                        <AuthPageRoute path={APP_ROUTES.AUTH} component={AuthPage}/>
+                        <PrivateRoute exact path={APP_ROUTES.AUTHENTICATED_PAGE} component={privatePage}/>
+                        <Route path='*' exact={true} component={PageNotFound}/>
+                    </Switch>
+                </div> :
+                <div className="App">
+                    <Switch>
+                        <Route exact path={APP_ROUTES.LANDING_PAGE} component={LandingPage}/>
+                        <Route path='*' exact={true} component={PageNotFound}/>
+                        <Route path='*' exact={true} render={() => (<div/>)}/>
+                    </Switch>
+                </div>
         );
     }
 }

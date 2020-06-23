@@ -5,16 +5,17 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import SignInStyleClasses from './SignIn.style';
-import {ReactComponent as GoogleLogo} from "../../assets/icons/google.svg";
-import {ReactComponent as FacebookLogo} from "../../assets/icons/facebook.svg";
-import {signInWithFacebook, signInWithGoogle} from "../../firebase/firebase.utils";
+import AuthStyleClasses from '../auth-components.style';
+import {ReactComponent as GoogleLogo} from "../../../assets/icons/google.svg";
+import {ReactComponent as FacebookLogo} from "../../../assets/icons/facebook.svg";
+import {signInWithFacebook, signInWithGoogle} from "../../../firebase/firebase.utils";
+import {AUTH_ROUTES} from "../../../routes/App.routes";
+import {Link} from "react-router-dom";
+import CustomInput from "../../CustomInput/custom-input.component";
 
 
 function Copyright() {
@@ -30,13 +31,13 @@ function Copyright() {
     );
 }
 
-export default function SignInSide() {
-    const classes = SignInStyleClasses();
+export default function SignIn() {
+    const classes = AuthStyleClasses();
 
     return (
         < Grid container component="main" className={classes.root}>
             <CssBaseline/>
-            <Grid item xs={false} sm={5} md={8} lg={9} className={classes.image}/>
+            <Grid item xs={false} sm={5} md={8} lg={9}/>
             <Grid item xs={12} sm={7} md={4} lg={3} component={Paper} elevation={6} square>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
@@ -46,28 +47,18 @@ export default function SignInSide() {
                         Sign in
                     </Typography>
                     <form className={classes.form}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
+                        <CustomInput
+                        label='Email'
+                        required
+                        fullWidth
+                        type='email'/>
+
+                        <CustomInput
+                            label='Password'
                             required
                             fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
+                            type='password'/>
+
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary"/>}
                             label="Remember me"
@@ -89,7 +80,7 @@ export default function SignInSide() {
                             color="default"
                             onClick={signInWithGoogle}
                             className={classes.otherSignInButton}>
-                            <GoogleLogo className = {classes.socialMediaLogo}/>
+                            <GoogleLogo className={classes.socialMediaLogo}/>
                             <span>Sign In With Google</span>
                         </Button>
 
@@ -100,7 +91,7 @@ export default function SignInSide() {
                             color="default"
                             onClick={signInWithFacebook}
                             className={classes.otherSignInButton}>
-                            <FacebookLogo className = {classes.socialMediaLogo}/>
+                            <FacebookLogo className={classes.socialMediaLogo}/>
                             <span>Sign In With Facebook</span>
                         </Button>
 
@@ -111,7 +102,7 @@ export default function SignInSide() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link to={AUTH_ROUTES.SIGN_UP} variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>

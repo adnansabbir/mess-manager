@@ -1,14 +1,18 @@
 import React from "react";
-import {Switch, Route, Redirect} from 'react-router-dom';
-import {AUTH_ROUTES} from "./auth.routes";
-import SignInSide from "../../components/SignIn/SignIn.component";
+import AuthStyleClasses from "./auth.style";
+import {Switch, Route, Redirect, BrowserRouter} from 'react-router-dom';
+import SignIn from "../../components/auth/sign-in/sign-in.component";
+import {AUTH_ROUTES} from "../../routes/App.routes";
+import SignUp from "../../components/auth/sign-up/sign-up.component";
 
 const AuthPage = ({match, ...rest}) => {
+    const Classes = AuthStyleClasses();
     return (
-        <div className="auth-page">
+        <div className={`${Classes.root} ${Classes.bgImage}`}>
             <Switch>
-                <Route path={`${match.path}${AUTH_ROUTES.SIGN_IN}`} component={SignInSide}/>
-                <Redirect from={match.path} to={`${match.path}${AUTH_ROUTES.SIGN_IN}`}/>
+                <Route path={`${AUTH_ROUTES.SIGN_IN}`} component={SignIn}/>
+                <Route path={`${AUTH_ROUTES.SIGN_UP}`} component={SignUp}/>
+                <Redirect from={match.path} to={`${AUTH_ROUTES.SIGN_IN}`}/>
             </Switch>
         </div>
     )

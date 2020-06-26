@@ -46,6 +46,4 @@ facebookAuthProvider.setCustomParameters({display: 'popup'});
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
-export const signInWithGoogle = () => auth.signInWithPopup(googleAuthProvider);
-export const signInWithFacebook = () => auth.signInWithPopup(facebookAuthProvider);
 export default firebase;
